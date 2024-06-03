@@ -1,10 +1,8 @@
-#server.py contents
-
 from fastapi import FastAPI
 import joblib
 import numpy as np
 
-# Load the trained model and define names of output classes
+# This is an example on how to serve a model by API
 model = joblib.load('app/model.joblib')
 class_names = np.array(['setosa', 'versicolor', 'virginica'])
 
@@ -12,22 +10,14 @@ class_names = np.array(['setosa', 'versicolor', 'virginica'])
 app = FastAPI()
 
 # The @app.get("/") decorator tells FastAPI that the function
-# right below is in charge of handling requests that go to this path (’/’)
-# which is the root page of our web-service.
 @app.get('/')
-# And the only thing this function is going to do is just print
+
 # a welcome message for the user.
 def read_root():
     return {'message': 'Iris model API'}
 
 # And in order to interact with our model, we need a post method, which will
 # receive the data, predict with the model and return the prediction result.
-# So just like above `@app.predict("/predict/")` tells FastAPI that the
-# function right below is in charge of handling requests that go to this
-# path (’/predict/’).
-# This means that we are creating another API path called /predict/ which
-# should be used to pass the data to the model and this incoming data will be
-# handled by the predict function
 @app.post('/predict')
 def predict(data: dict):
     """
